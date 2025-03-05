@@ -12,6 +12,11 @@ from accelerate import Accelerator
 from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
 from bert_score import score
 
+torch.backends.cuda.matmul.allow_tf32 = True  # Ensure tensor cores are used
+torch.backends.cuda.enable_flash_sdp(True)   # Enable Flash Attention
+torch.backends.cuda.enable_mem_efficient_sdp(False)
+torch.backends.cuda.enable_math_sdp(False)
+
 st.title("Financial Document Q&A Chatbot")
 
 @st.cache_resource
@@ -20,7 +25,8 @@ def load_models():
     accelerator = Accelerator()
     MODEL_NAME = "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"
     tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-    model = AutoModelForCausalLM.from_pretrained(MODEL_NAME, device_map="auto", trust_remote_code=True, cache_dir="./my_models")
+    model = AutoModelForCausalLM.from_pretrained(MODEL_NAME, device_map="auto", torch_dtype=torch.float16, attn_implementation="flash_attention_2")
+    model.config.use_sliding_window_attention = False
     model = accelerator.prepare(model)
     generator = pipeline("text-generation", model=model, tokenizer=tokenizer)
     return embedding_model, tokenizer, generator, accelerator
