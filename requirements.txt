@@ -1,0 +1,10 @@
+torch
+transformers
+sentence-transformers
+faiss-cpu
+rank_bm25
+nltk
+accelerate
+pypdf
+streamlit
+bert_score
