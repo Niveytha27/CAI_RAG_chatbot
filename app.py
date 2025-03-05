@@ -25,7 +25,7 @@ def load_models():
     accelerator = Accelerator()
     MODEL_NAME = "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"
     tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-    model = AutoModelForCausalLM.from_pretrained(MODEL_NAME, device_map="auto", torch_dtype=torch.float16, attn_implementation="flash_attention_2")
+    model = AutoModelForCausalLM.from_pretrained(MODEL_NAME, device_map="auto", torch_dtype=torch.float16, trust_remote_code=True)
     model.config.use_sliding_window_attention = False
     model = accelerator.prepare(model)
     generator = pipeline("text-generation", model=model, tokenizer=tokenizer)
