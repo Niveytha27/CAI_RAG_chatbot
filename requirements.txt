@@ -1,11 +1,10 @@
-torch
+torch==2.2.0
+transformers
 sentence-transformers
 faiss-cpu
-rank_bm25
-transformers
-nltk
-dotenv
-accelerate
 pypdf
+requests
+accelerate
+bert-score
+rank-bm25
 streamlit
-bert_score
