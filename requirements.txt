@@ -8,3 +8,4 @@ dotenv
 accelerate
 pypdf
 streamlit
+bert_score
