@@ -14,6 +14,11 @@ from bert_score import score
 
 st.title("Financial Document Q&A Chatbot")
 
+torch.backends.cuda.matmul.allow_tf32 = True  # Ensure tensor cores are used
+torch.backends.cuda.enable_flash_sdp(True)   # Enable Flash Attention
+torch.backends.cuda.enable_mem_efficient_sdp(False)
+torch.backends.cuda.enable_math_sdp(False)
+
 @st.cache_resource
 def load_models():
     embedding_model = SentenceTransformer("BAAI/bge-large-en")
